@@ -1,6 +1,6 @@
 package com.example.server._core.security;
 
-import com.example.server.user.User;
+import com.example.server.user.model.User;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
