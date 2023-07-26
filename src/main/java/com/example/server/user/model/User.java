@@ -32,17 +32,20 @@ public class User {
     @Column(nullable = false, length = 100)
     private String password;
 
+    @Column(nullable = false)
     private String role;
 
-//    private String profile_image;
+    @Column(nullable = false)
+    private String profile_image;
 
-//    private Timestamp employmentDate;
+    @Column(nullable = false)
+    private Timestamp hireDate;
 
     @CreationTimestamp
-    private Timestamp createdAt;
+    private Timestamp createdDate;
 
     @UpdateTimestamp
-    private Timestamp updatedAt;
+    private Timestamp updatedDate;
 
     @PrePersist
     protected void onCreate() {

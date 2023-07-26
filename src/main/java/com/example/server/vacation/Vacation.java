@@ -1,9 +1,8 @@
 package com.example.server.vacation;
 
-import com.example.server.user.User;
+import com.example.server.user.model.User;
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -12,6 +11,7 @@ import java.sql.Timestamp;
 @Table(name = "vacation_tb")
 @Entity
 public class Vacation {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,21 +21,22 @@ public class Vacation {
     private User user;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Reason reason;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Status status;
 
-    @CreationTimestamp
+    @Column(nullable = false)
     private Timestamp startDate;
 
-    @UpdateTimestamp
+    @Column(nullable = false)
     private Timestamp endDate;
 
-    @CreationTimestamp
     private Timestamp approvalDate;
 
-    @UpdateTimestamp
+    @CreationTimestamp
     private Timestamp createdDate;
 
     @PrePersist

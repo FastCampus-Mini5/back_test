@@ -32,9 +32,8 @@ public class SignUp {
     private String password;
 
     @Column(nullable = false)
-    private Timestamp hire_date;
+    private Timestamp hireDate;
 
     @CreationTimestamp
-    private Timestamp created_date;
-
+    private Timestamp createdDate;
 }

@@ -1,6 +1,6 @@
 package com.example.server.vacation;
 
-import com.example.server.user.User;
+import com.example.server.user.model.User;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -18,6 +18,15 @@ public class VacationInfo {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(nullable = false)
     private int remainVacation;
+
+    @Column(nullable = false)
     private int usedVacation;
+
+    @PrePersist
+    public void onCreate() {
+        remainVacation = 0;
+        usedVacation = 0;
+    }
 }
