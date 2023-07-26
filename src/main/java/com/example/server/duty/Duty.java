@@ -1,6 +1,8 @@
 package com.example.server.duty;
 
-import com.example.server.user.User;
+
+import com.example.server.user.model.User;
+import com.example.server.vacation.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,19 +20,20 @@ import java.sql.Timestamp;
 @Builder
 @Getter
 public class Duty {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Column(nullable = false)
     private Timestamp dutyDate;
 
     @Enumerated(EnumType.STRING)
-    private StatusType status;
+    private Status status;
 
     @Column
     private Timestamp approvalDate;
@@ -39,10 +42,10 @@ public class Duty {
     private Timestamp createdDate;
 
     @UpdateTimestamp
-    private Timestamp updatedAt;
+    private Timestamp updatedDate;
 
     @PrePersist
     protected void onCreate() {
-        status = StatusType.READY;
+        status = Status.READY;
     }
 }
