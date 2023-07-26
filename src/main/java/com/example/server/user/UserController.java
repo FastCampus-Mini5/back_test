@@ -1,6 +1,7 @@
 package com.example.server.user;
 
 import com.example.server._core.util.ApiResponse;
+import com.example.server.user.model.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

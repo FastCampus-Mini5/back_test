@@ -4,6 +4,7 @@ import com.example.server._core.errors.ErrorMessage;
 import com.example.server._core.errors.exception.Exception500;
 import com.example.server._core.security.PrincipalUserDetail;
 import com.example.server._core.security.jwt.JwtTokenProvider;
+import com.example.server.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

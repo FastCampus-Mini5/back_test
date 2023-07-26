@@ -9,7 +9,7 @@ import com.example.server._core.errors.ErrorMessage;
 import com.example.server._core.errors.exception.Exception401;
 import com.example.server._core.security.PrincipalUserDetail;
 import com.example.server._core.util.FilterResponse;
-import com.example.server.user.User;
+import com.example.server.user.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

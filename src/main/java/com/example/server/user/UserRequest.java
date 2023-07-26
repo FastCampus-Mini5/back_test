@@ -1,5 +1,6 @@
 package com.example.server.user;
 
+import com.example.server.user.model.User;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 

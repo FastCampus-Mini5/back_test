@@ -2,7 +2,7 @@ package com.example.server._core.security;
 
 import com.example.server._core.errors.ErrorMessage;
 import com.example.server._core.errors.exception.Exception500;
-import com.example.server.user.User;
+import com.example.server.user.model.User;
 import com.example.server.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
