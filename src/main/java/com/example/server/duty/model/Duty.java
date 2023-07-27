@@ -1,8 +1,8 @@
-package com.example.server.duty;
+package com.example.server.duty.model;
 
 
+import com.example.server.common.Status;
 import com.example.server.user.model.User;
-import com.example.server.vacation.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -46,6 +46,6 @@ public class Duty {
 
     @PrePersist
     protected void onCreate() {
-        status = Status.READY;
+        status = Status.PENDING;
     }
 }
