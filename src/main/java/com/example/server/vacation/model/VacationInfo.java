@@ -1,4 +1,4 @@
-package com.example.server.vacation;
+package com.example.server.vacation.model;
 
 import com.example.server.user.model.User;
 import lombok.Getter;
