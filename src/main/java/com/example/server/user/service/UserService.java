@@ -22,10 +22,10 @@ public class UserService {
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
 
-    public User save(UserRequest.JoinDTO joinDTO) {
-        if (joinDTO == null) throw new Exception500(ErrorMessage.EMPTY_DATA_TO_JOIN);
+    public User save(UserRequest.SignUpDTO signUpDTO) {
+        if (signUpDTO == null) throw new Exception500(ErrorMessage.EMPTY_DATA_TO_JOIN);
 
-        User user = joinDTO.toEntityWithHashPassword(passwordEncoder);
+        User user = signUpDTO.toEntityWithHashPassword(passwordEncoder);
 
         return userRepository.save(user);
     }

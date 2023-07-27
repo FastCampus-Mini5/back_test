@@ -39,9 +39,9 @@ public class UserController {
 
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse.Result<User>> signup(
-            @RequestBody @Valid UserRequest.JoinDTO joinDTO, Errors errors) {
+            @RequestBody @Valid UserRequest.SignUpDTO signUpDTO, Errors errors) {
 
-        User responseUser = userService.save(joinDTO);
+        User responseUser = userService.save(signUpDTO);
 
         return ResponseEntity.ok(ApiResponse.success(responseUser));
     }
