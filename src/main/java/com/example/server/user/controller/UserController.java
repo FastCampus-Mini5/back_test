@@ -1,7 +1,9 @@
-package com.example.server.user;
+package com.example.server.user.controller;
 
 import com.example.server._core.security.PrincipalUserDetail;
 import com.example.server._core.util.ApiResponse;
+import com.example.server.user.dto.UserRequest;
+import com.example.server.user.service.UserService;
 import com.example.server.user.model.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
