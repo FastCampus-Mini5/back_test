@@ -1,6 +1,8 @@
-package com.example.server.vacation;
+package com.example.server.vacation.model;
 
+import com.example.server.common.Status;
 import com.example.server.user.model.User;
+import com.example.server.vacation.enums.Reason;
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -41,6 +43,6 @@ public class Vacation {
 
     @PrePersist
     protected void onCreate() {
-        status = Status.READY;
+        status = Status.PENDING;
     }
 }
