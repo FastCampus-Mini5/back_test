@@ -1,4 +1,4 @@
-package com.example.server.user;
+package com.example.server.user.dto;
 
 import com.example.server.user.model.User;
 import lombok.*;

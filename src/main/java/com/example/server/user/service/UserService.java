@@ -1,10 +1,12 @@
-package com.example.server.user;
+package com.example.server.user.service;
 
 import com.example.server._core.errors.ErrorMessage;
 import com.example.server._core.errors.exception.Exception500;
 import com.example.server._core.security.PrincipalUserDetail;
 import com.example.server._core.security.jwt.JwtTokenProvider;
+import com.example.server.user.dto.UserRequest;
 import com.example.server.user.model.User;
+import com.example.server.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
