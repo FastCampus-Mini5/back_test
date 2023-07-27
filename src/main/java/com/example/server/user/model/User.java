@@ -1,9 +1,6 @@
 package com.example.server.user.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -17,6 +14,7 @@ import java.sql.Timestamp;
 @Builder
 @Table(name = "user_tb")
 @Entity
+@ToString
 public class User {
 
     @Id
@@ -36,7 +34,7 @@ public class User {
     private String role;
 
     @Column(nullable = false)
-    private String profile_image;
+    private String profileImage;
 
     @Column(nullable = false)
     private Timestamp hireDate;
