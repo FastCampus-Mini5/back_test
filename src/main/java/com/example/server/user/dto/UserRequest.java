@@ -16,7 +16,7 @@ public class UserRequest {
     @AllArgsConstructor
     @Builder
     @ToString
-    public static class JoinDTO {
+    public static class SignUpDTO {
 
         @NotBlank
         @Pattern(regexp = "^[a-zA-Z0-9+-\\_.]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$")
