@@ -1,4 +1,4 @@
-package com.example.server.serverlog;
+package com.example.server.serverlog.model;
 
 import com.example.server.user.model.User;
 import org.springframework.data.annotation.CreatedDate;
