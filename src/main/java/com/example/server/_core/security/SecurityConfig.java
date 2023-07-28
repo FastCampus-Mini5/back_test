@@ -57,11 +57,13 @@ public class SecurityConfig {
                     FilterResponse.forbidden(response, new Exception403(ErrorMessage.FORBIDDEN));
                 })
 
-                .and().authorizeRequests(expressionInterceptUrlRegistry -> {
-                    expressionInterceptUrlRegistry
-                            .antMatchers("/auth/**").authenticated()
-                            .anyRequest().permitAll();
-                });
+                .and().authorizeRequests(expressionInterceptUrlRegistry ->
+                        expressionInterceptUrlRegistry
+                                .antMatchers("/api/user/signin", "/api/user/signup", "/api/user/emailCheck")
+                                .permitAll()
+                                .antMatchers("/api/user/**").authenticated()
+
+                );
 
         return http.build();
     }
