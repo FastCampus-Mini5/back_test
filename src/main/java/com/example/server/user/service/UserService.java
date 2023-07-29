@@ -48,13 +48,12 @@ public class UserService {
 
         String email = checkEmailDTO.getEmail();
 
-        UserResponse.AvailableEmailDTO availableEmailDTO = UserResponse.AvailableEmailDTO.builder()
-                .email(email).available(true).build();
-
         if (userRepository.existsByEmail(email)) {
-            availableEmailDTO.setAvailable(false);
+            return UserResponse.AvailableEmailDTO.builder()
+                    .email(email).available(false).build();
         }
 
-        return availableEmailDTO;
+        return UserResponse.AvailableEmailDTO.builder()
+                .email(email).available(true).build();
     }
 }
