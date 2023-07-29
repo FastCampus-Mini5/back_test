@@ -25,7 +25,7 @@ public class PrincipalUserDetailsService implements UserDetailsService {
         log.info("스프링 시큐리티 로그인 서비스 호출 email: " + email);
 
         Optional<User> userOptional = userRepository.findByEmail(email);
-        User user = userOptional.orElseThrow(() -> new Exception500(ErrorMessage.LOGIN_FAILED));
+        User user = userOptional.orElseThrow(() -> new Exception500(ErrorMessage.USER_NOT_EXIST));
 
         return new PrincipalUserDetail(user);
     }
