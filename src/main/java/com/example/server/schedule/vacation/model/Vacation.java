@@ -3,13 +3,16 @@ package com.example.server.schedule.vacation.model;
 import com.example.server.schedule.Status;
 import com.example.server.schedule.vacation.enums.Reason;
 import com.example.server.user.model.User;
-import lombok.Getter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
+@Builder
 @Table(name = "vacation_tb")
 @Entity
 public class Vacation {
