@@ -11,4 +11,13 @@ public class UserResponse {
         private String email;
         private Boolean available;
     }
+
+    @Getter
+    @Builder
+    public static class UserInfoDTO {
+        private String username;
+        private String email;
+        private String profileImage;
+        private String hireDate;
+    }
 }
