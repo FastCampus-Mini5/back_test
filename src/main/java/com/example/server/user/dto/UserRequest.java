@@ -71,4 +71,15 @@ public class UserRequest {
         @Email(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$", message = "유효하지 않은 이메일 주소입니다.")
         private String email;
     }
+
+    @Getter
+    @ToString
+    public static class UpdateInfoDTO {
+        private String profileImg; // TODO : 이미지 파일 첨부
+
+        @NotBlank
+        @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$",
+                message = "비밀번호는 영어 대문자, 영어 소문자, 숫자, 특수문자를 모두 포함해야 하며, 최소 8글자 이상이어야 합니다.")
+        private String password;
+    }
 }
