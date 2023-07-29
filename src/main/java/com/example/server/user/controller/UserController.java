@@ -1,5 +1,6 @@
 package com.example.server.user.controller;
 
+import com.example.server._core.security.PrincipalUserDetail;
 import com.example.server._core.util.ApiResponse;
 import com.example.server.user.dto.UserRequest;
 import com.example.server.user.dto.UserResponse;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
@@ -52,5 +54,15 @@ public class UserController {
         UserResponse.AvailableEmailDTO availableEmailDTO = userService.checkEmail(checkEmailDTO);
 
         return ResponseEntity.ok(ApiResponse.success(availableEmailDTO));
+    }
+
+    @GetMapping("/info")
+    public ResponseEntity<ApiResponse.Result<UserResponse.UserInfoDTO>> userInfo(@AuthenticationPrincipal PrincipalUserDetail userDetail) {
+
+        UserResponse.UserInfoDTO userInfoDTO = userService.getUserInfoByUserId(userDetail.getUser().getId());
+
+        log.info("조회된 유저 정보 : {}", userInfoDTO);
+
+        return ResponseEntity.ok(ApiResponse.success(userInfoDTO));
     }
 }
