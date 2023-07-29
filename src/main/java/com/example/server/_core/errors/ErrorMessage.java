@@ -21,4 +21,5 @@ public class ErrorMessage {
 
     public static final String VACATION_INFO_NOT_FOUND = "연차 정보를 찾을 수 없습니다.";
     public static final String NOT_ENOUGH_REMAINING_VACATION_DAYS = "남은 연차일이 충분하지 않습니다.";
+    public static final String DUTY_ALREADY_EXISTS = "해당 날짜에 이미 당직이 있습니다.";
 }
