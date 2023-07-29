@@ -1,56 +1,56 @@
 package com.example.server.user.controller;
 
-import com.example.server._core.security.PrincipalUserDetail;
 import com.example.server._core.util.ApiResponse;
 import com.example.server.user.dto.UserRequest;
-import com.example.server.user.service.UserService;
+import com.example.server.user.dto.UserResponse;
 import com.example.server.user.model.User;
+import com.example.server.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @Slf4j
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/api/user")
 public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/auth")
-    public String auth(HttpServletRequest request) {
-        log.info(request.getHeader("Authorization"));
-        return "토큰 잘 들어와 인증도 잘 됐어!";
-    }
-
-    @GetMapping("/auth/test")
-    public String test(@AuthenticationPrincipal PrincipalUserDetail userDetail) {
-        log.info(userDetail.getUser().toString());
-        return "test";
-    }
-
     @PostMapping("/signup")
-    public ResponseEntity<ApiResponse.Result<User>> signup(
-            @RequestBody @Valid UserRequest.SignUpDTO signUpDTO, Errors errors) {
+    public ResponseEntity<ApiResponse.Result<User>> signup(@RequestBody @Valid UserRequest.SignUpDTO signUpDTO, Errors errors) {
 
-        User responseUser = userService.save(signUpDTO);
+        userService.saveSignUpRequest(signUpDTO);
 
-        return ResponseEntity.ok(ApiResponse.success(responseUser));
+        return ResponseEntity.ok(ApiResponse.success(null));
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<ApiResponse.Result<String>> login(
-            @RequestBody @Valid UserRequest.LoginDTO loginDTO, Errors errors) {
-        String jwt = userService.login(loginDTO);
+    @PostMapping("/signin")
+    public ResponseEntity<ApiResponse.Result<String>> signIn(@RequestBody @Valid UserRequest.SignInDTO signInDTO, Errors errors) {
 
-        return ResponseEntity.ok(ApiResponse.success(jwt));
+        String jwt = userService.signIn(signInDTO);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.AUTHORIZATION, jwt);
+
+        log.info("{}", ResponseEntity.ok().headers(headers).body(null));
+
+        return ResponseEntity.ok().headers(headers).body(null);
+    }
+
+    @GetMapping("/emailCheck")
+    public ResponseEntity<ApiResponse.Result<UserResponse.AvailableEmailDTO>> check(@ModelAttribute(name = "email") @Valid UserRequest.EmailDTO emailDTO, BindingResult bindingResult) {
+
+        log.info("{}", emailDTO);
+
+        UserResponse.AvailableEmailDTO availableEmailDTO = userService.checkEmail(emailDTO);
+
+        return ResponseEntity.ok(ApiResponse.success(availableEmailDTO));
     }
 }
