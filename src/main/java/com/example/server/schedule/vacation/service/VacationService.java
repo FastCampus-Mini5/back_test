@@ -2,6 +2,8 @@ package com.example.server.schedule.vacation.service;
 
 
 import com.example.server._core.errors.ErrorMessage;
+import com.example.server._core.errors.exception.Exception400;
+import com.example.server._core.errors.exception.Exception404;
 import com.example.server.schedule.vacation.model.Vacation;
 import com.example.server.schedule.vacation.model.VacationInfo;
 import com.example.server.schedule.vacation.repository.VacationInfoRepository;
@@ -22,13 +24,13 @@ public class VacationService {
     @Transactional
     public Vacation requestVacation(Vacation vacationRequest) {
         VacationInfo vacationInfo = vacationInfoRepository.findByUser(vacationRequest.getUser())
-                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.VACATION_INFO_NOT_FOUND));
+                .orElseThrow(() -> new Exception404(ErrorMessage.VACATION_INFO_NOT_FOUND));
 
         long vacationDays = Duration.between(vacationRequest.getStartDate().toLocalDateTime(),
                 vacationRequest.getEndDate().toLocalDateTime()).toDays();
 
         if (vacationInfo.getRemainVacation() < vacationDays) {
-            throw new IllegalArgumentException(ErrorMessage.NOT_ENOUGH_REMAINING_VACATION_DAYS);
+            throw new Exception400(ErrorMessage.NOT_ENOUGH_REMAINING_VACATION_DAYS, String.valueOf(vacationDays));
         }
 
         vacationInfo.setRemainVacation(vacationInfo.getRemainVacation() - (int) vacationDays);
