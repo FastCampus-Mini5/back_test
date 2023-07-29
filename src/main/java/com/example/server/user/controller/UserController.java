@@ -65,4 +65,12 @@ public class UserController {
 
         return ResponseEntity.ok(ApiResponse.success(userInfoDTO));
     }
+
+    @PostMapping("/update")
+    public ResponseEntity<ApiResponse.Result<String>> updateUserInfo(@AuthenticationPrincipal PrincipalUserDetail userDetail, @RequestBody @Valid UserRequest.UpdateInfoDTO updateInfoDTO, Errors errors) {
+
+        userService.updateUserInfoByUserId(userDetail.getUser().getId(), updateInfoDTO);
+
+        return ResponseEntity.ok(ApiResponse.success(null));
+    }
 }
