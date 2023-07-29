@@ -69,4 +69,16 @@ public class UserService {
                 .hireDate(user.getHireDate())
                 .build();
     }
+
+    public void updateUserInfoByUserId(Long userId, UserRequest.UpdateInfoDTO updateInfoDTO) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> {
+                    throw new Exception500(ErrorMessage.USER_NOT_EXIST);
+                });
+
+        user.setProfileImage(updateInfoDTO.getProfileImg());
+        user.setPassword(updateInfoDTO.getPassword()); // TODO : 암호화
+
+        userRepository.save(user);
+    }
 }
