@@ -5,7 +5,9 @@ import com.example.server._core.errors.exception.Exception500;
 import com.example.server._core.security.PrincipalUserDetail;
 import com.example.server._core.security.jwt.JwtTokenProvider;
 import com.example.server.user.dto.UserRequest;
+import com.example.server.user.dto.UserResponse;
 import com.example.server.user.model.User;
+import com.example.server.user.repository.SignUpRepository;
 import com.example.server.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,27 +21,40 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final PasswordEncoder passwordEncoder;
-    private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
+    private final SignUpRepository signUpRepository;
+    private final UserRepository userRepository;
 
-    public User save(UserRequest.SignUpDTO signUpDTO) {
-        if (signUpDTO == null) throw new Exception500(ErrorMessage.EMPTY_DATA_TO_JOIN);
+    public void saveSignUpRequest(UserRequest.SignUpDTO signUpDTO) {
+        if (signUpDTO == null) throw new Exception500(ErrorMessage.EMPTY_DATA_TO_SIGNUP);
 
-        User user = signUpDTO.toEntityWithHashPassword(passwordEncoder);
-
-        return userRepository.save(user);
+        signUpRepository.save(signUpDTO.toEntityWithHashPassword(passwordEncoder));
     }
 
-    public String login(UserRequest.LoginDTO loginDTO) {
-        if (loginDTO == null) throw new Exception500(ErrorMessage.EMPTY_DATA_TO_LOGIN);
+    public String signIn(UserRequest.SignInDTO signInDTO) {
+        if (signInDTO == null) throw new Exception500(ErrorMessage.EMPTY_DATA_TO_SIGNIN);
 
         UsernamePasswordAuthenticationToken token
-                = new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword());
+                = new UsernamePasswordAuthenticationToken(signInDTO.getEmail(), signInDTO.getPassword());
 
         Authentication authentication = authenticationManager.authenticate(token);
         PrincipalUserDetail userDetail = (PrincipalUserDetail) authentication.getPrincipal();
         final User user = userDetail.getUser();
 
         return JwtTokenProvider.create(user);
+    }
+
+    public UserResponse.AvailableEmailDTO checkEmail(UserRequest.CheckEmailDTO checkEmailDTO) {
+
+        String email = checkEmailDTO.getEmail();
+
+        UserResponse.AvailableEmailDTO availableEmailDTO = UserResponse.AvailableEmailDTO.builder()
+                .email(email).available(true).build();
+
+        if (userRepository.existsByEmail(email)) {
+            availableEmailDTO.setAvailable(false);
+        }
+
+        return availableEmailDTO;
     }
 }
