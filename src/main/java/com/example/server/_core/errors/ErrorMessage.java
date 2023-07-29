@@ -15,5 +15,6 @@ public class ErrorMessage {
 
     public static final String EMPTY_DATA_TO_SIGNUP = "회원 가입을 위한 데이터가 존재하지 않습니다.";
     public static final String EMPTY_DATA_TO_SIGNIN = "로그인을 위한 데이터가 존재하지 않습니다.";
+    public static final String EMPTY_DATA_TO_CHECK_EMAIL = "중복 확인을 위한 이메일 정보가 존재하지 않습니다.";
     public static final String LOGIN_FAILED = "회원 정보가 존재하지 않습니다.";
 }
