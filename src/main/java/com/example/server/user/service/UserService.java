@@ -45,6 +45,7 @@ public class UserService {
     }
 
     public UserResponse.AvailableEmailDTO checkEmail(UserRequest.CheckEmailDTO checkEmailDTO) {
+        if (checkEmailDTO == null) throw new Exception500(ErrorMessage.EMPTY_DATA_TO_CHECK_EMAIL);
 
         String email = checkEmailDTO.getEmail();
 
