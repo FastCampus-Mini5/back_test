@@ -8,7 +8,6 @@ import com.example.server.schedule.vacation.model.Vacation;
 import com.example.server.schedule.vacation.model.VacationInfo;
 import com.example.server.schedule.vacation.repository.VacationInfoRepository;
 import com.example.server.schedule.vacation.repository.VacationRepository;
-import com.example.server.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +29,7 @@ public class VacationService {
                 vacationRequest.getEndDate().toLocalDateTime()).toDays();
 
         if (vacationInfo.getRemainVacation() < vacationDays) {
-            throw new Exception400(ErrorMessage.NOT_ENOUGH_REMAINING_VACATION_DAYS, String.valueOf(vacationDays));
+            throw new Exception400(ErrorMessage.NOT_ENOUGH_REMAINING_VACATION_DAYS);
         }
 
         vacationInfo.setRemainVacation(vacationInfo.getRemainVacation() - (int) vacationDays);
