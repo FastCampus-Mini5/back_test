@@ -27,12 +27,14 @@ public class User {
     @Column(unique = true, nullable = false, length = 100)
     private String username;
 
+    @Setter
     @Column(nullable = false, length = 100)
     private String password;
 
     @Column(nullable = false)
     private String role;
 
+    @Setter
     @Column(nullable = false)
     private String profileImage;
 
