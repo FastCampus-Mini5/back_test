@@ -45,11 +45,11 @@ public class UserController {
     }
 
     @GetMapping("/emailCheck")
-    public ResponseEntity<ApiResponse.Result<UserResponse.AvailableEmailDTO>> check(@ModelAttribute(name = "email") @Valid UserRequest.EmailDTO emailDTO, BindingResult bindingResult) {
+    public ResponseEntity<ApiResponse.Result<UserResponse.AvailableEmailDTO>> check(@ModelAttribute(name = "email") @Valid UserRequest.CheckEmailDTO checkEmailDTO, BindingResult bindingResult) {
 
-        log.info("{}", emailDTO);
+        log.info("{}", checkEmailDTO);
 
-        UserResponse.AvailableEmailDTO availableEmailDTO = userService.checkEmail(emailDTO);
+        UserResponse.AvailableEmailDTO availableEmailDTO = userService.checkEmail(checkEmailDTO);
 
         return ResponseEntity.ok(ApiResponse.success(availableEmailDTO));
     }
