@@ -1,4 +1,9 @@
 package com.example.server.schedule.vacation.repository;
 
-public class VacationRepository {
+
+import com.example.server.schedule.vacation.model.Vacation;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface VacationRepository extends JpaRepository<Vacation, Long> {
+
 }

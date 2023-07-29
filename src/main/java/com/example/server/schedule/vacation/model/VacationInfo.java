@@ -2,10 +2,12 @@ package com.example.server.schedule.vacation.model;
 
 import com.example.server.user.model.User;
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Getter
+@Setter
 @Table(name = "vacation_info_tb")
 @Entity
 public class VacationInfo {
