@@ -4,10 +4,14 @@ package com.example.server.schedule.vacation.service;
 import com.example.server._core.errors.ErrorMessage;
 import com.example.server._core.errors.exception.Exception400;
 import com.example.server._core.errors.exception.Exception404;
+import com.example.server.schedule.vacation.dto.VacationRequest;
+import com.example.server.schedule.vacation.dto.VacationResponse;
 import com.example.server.schedule.vacation.model.Vacation;
 import com.example.server.schedule.vacation.model.VacationInfo;
 import com.example.server.schedule.vacation.repository.VacationInfoRepository;
 import com.example.server.schedule.vacation.repository.VacationRepository;
+import com.example.server.user.model.User;
+import com.example.server.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,15 +22,20 @@ import java.time.Duration;
 @Service
 public class VacationService {
 
+    private final UserService userService;
     private final VacationRepository vacationRepository;
     private final VacationInfoRepository vacationInfoRepository;
+
     @Transactional
-    public Vacation requestVacation(Vacation vacationRequest) {
-        VacationInfo vacationInfo = vacationInfoRepository.findByUser(vacationRequest.getUser())
+    public VacationResponse.VacationDTO requestVacation(VacationRequest.AddVacationDTO vacationRequest, String username) {
+        User user = userService.findUserByEmail(username);
+        Vacation vacation = vacationRequest.toVacationEntity(user);
+
+        VacationInfo vacationInfo = vacationInfoRepository.findByUser(vacation.getUser())
                 .orElseThrow(() -> new Exception404(ErrorMessage.VACATION_INFO_NOT_FOUND));
 
-        long vacationDays = Duration.between(vacationRequest.getStartDate().toLocalDateTime(),
-                vacationRequest.getEndDate().toLocalDateTime()).toDays();
+        long vacationDays = Duration.between(vacation.getStartDate().toLocalDateTime(),
+                vacation.getEndDate().toLocalDateTime()).toDays();
 
         if (vacationInfo.getRemainVacation() < vacationDays) {
             throw new Exception400(ErrorMessage.NOT_ENOUGH_REMAINING_VACATION_DAYS);
@@ -35,6 +44,8 @@ public class VacationService {
         vacationInfo.setRemainVacation(vacationInfo.getRemainVacation() - (int) vacationDays);
         vacationInfo.setUsedVacation(vacationInfo.getUsedVacation() + (int) vacationDays);
 
-        return vacationRepository.save(vacationRequest);
+        Vacation savedVacation = vacationRepository.save(vacation);
+        return VacationResponse.VacationDTO.from(savedVacation);
     }
 }
+
