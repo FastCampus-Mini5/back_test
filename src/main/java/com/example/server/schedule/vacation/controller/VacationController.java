@@ -1,11 +1,11 @@
 package com.example.server.schedule.vacation.controller;
 
+import com.example.server._core.util.ApiResponse;
 import com.example.server.schedule.vacation.dto.VacationRequest;
-import com.example.server.schedule.vacation.model.Vacation;
+import com.example.server.schedule.vacation.dto.VacationResponse;
 import com.example.server.schedule.vacation.service.VacationService;
-import com.example.server.user.model.User;
-import com.example.server.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,19 +16,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/user")
 public class VacationController {
 
     private final VacationService vacationService;
-    private final UserService userService;
-    @PostMapping("/vacation/add")
-    public ResponseEntity<Vacation> add(@RequestBody @Valid VacationRequest vacationRequestDTO,
-                                        @AuthenticationPrincipal UserDetails userDetails) {
-        User user = userService.findUserByEmail(userDetails.getUsername());
-        Vacation vacation = vacationRequestDTO.toVacationEntity(user);
-        vacation = vacationService.requestVacation(vacation);
-        return ResponseEntity.ok(vacation);
+
+    @PostMapping("/vacation/request")
+    public ResponseEntity<ApiResponse.Result<VacationResponse.VacationDTO>> requestVacation(@RequestBody @Valid VacationRequest.AddVacationDTO vacationRequest,
+                                                                                            @AuthenticationPrincipal UserDetails userDetails) {
+        VacationResponse.VacationDTO vacationDTO = vacationService.requestVacation(vacationRequest, userDetails.getUsername());
+
+        return ResponseEntity.ok(ApiResponse.success(vacationDTO));
     }
 }
+
+
