@@ -9,6 +9,7 @@ import java.sql.Timestamp;
 import java.util.Optional;
 
 public interface DutyRepository extends JpaRepository<Duty, Long> {
+
     Optional<Duty> findByUserAndDutyDate(User user, Timestamp dutyDate);
 }
 
