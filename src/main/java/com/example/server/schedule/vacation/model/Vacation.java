@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.sql.Timestamp;
 
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -21,6 +22,7 @@ public class Vacation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Id
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -33,6 +35,7 @@ public class Vacation {
     @Column(nullable = false)
     private Status status;
 
+    @Id
     @Column(nullable = false)
     private Timestamp startDate;
 
