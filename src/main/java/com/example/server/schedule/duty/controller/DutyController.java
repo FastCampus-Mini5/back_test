@@ -4,10 +4,7 @@ package com.example.server.schedule.duty.controller;
 import com.example.server._core.util.ApiResponse;
 import com.example.server.schedule.duty.dto.DutyRequest;
 import com.example.server.schedule.duty.dto.DutyResponse;
-import com.example.server.schedule.duty.model.Duty;
 import com.example.server.schedule.duty.service.DutyService;
-import com.example.server.user.model.User;
-import com.example.server.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +26,7 @@ public class DutyController {
     private final DutyService dutyService;
 
     @PostMapping("/duty/add")
-    public ResponseEntity<ApiResponse.Result<DutyResponse.DutyDTO>> add(@RequestBody @Valid DutyRequest.AddDutyDTO dutyRequest,
+    public ResponseEntity<ApiResponse.Result<DutyResponse.DutyDTO>> add(@RequestBody @Valid DutyRequest.AddDTO dutyRequest,
                                                                         @AuthenticationPrincipal UserDetails userDetails) {
 
         DutyResponse.DutyDTO dutyResponse = dutyService.requestDuty(dutyRequest, userDetails.getUsername());
@@ -37,5 +34,3 @@ public class DutyController {
         return ResponseEntity.ok(ApiResponse.success(dutyResponse));
     }
 }
-
-

@@ -23,10 +23,10 @@ public class DutyService {
     private final UserService userService;
 
     @Transactional
-    public DutyResponse.DutyDTO requestDuty(DutyRequest.AddDutyDTO dutyRequest, String username) {
+    public DutyResponse.DutyDTO requestDuty(DutyRequest.AddDTO dutyRequest, String username) {
 
         User user = userService.findUserByEmail(username);
-        Duty duty = dutyRequest.toDutyEntity(user);
+        Duty duty = dutyRequest.toEntityWith(user);
 
         Optional<Duty> existingDuty = dutyRepository.findByUserAndDutyDate(duty.getUser(), duty.getDutyDate());
         existingDuty.ifPresent(existing -> {
@@ -37,4 +37,3 @@ public class DutyService {
         return DutyResponse.DutyDTO.from(savedDuty);
     }
 }
-

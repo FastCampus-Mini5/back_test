@@ -15,12 +15,12 @@ public class DutyRequest {
     @AllArgsConstructor
     @Builder
     @ToString
-    public static class AddDutyDTO {
+    public static class AddDTO {
 
         @NotNull
         private Timestamp dutyDate;
 
-        public Duty toDutyEntity(User user) {
+        public Duty toEntityWith(User user) {
             return Duty.builder()
                     .user(user)
                     .dutyDate(dutyDate)
