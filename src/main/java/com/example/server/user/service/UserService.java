@@ -58,8 +58,11 @@ public class UserService {
         return UserResponse.AvailableEmailDTO.builder()
                 .email(email).available(true).build();
     }
-    public User findUserByEmail(String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException(ErrorMessage.USER_NOT_FOUND_WITH_EMAIL + email));
+
+    public User findUserById(Long id) {
+        if (id == null) throw new Exception500(ErrorMessage.EMPTY_USER_ID);
+
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException(ErrorMessage.USER_NOT_FOUND_WITH_ID + id));
     }
 }

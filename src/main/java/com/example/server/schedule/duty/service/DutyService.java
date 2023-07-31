@@ -23,9 +23,9 @@ public class DutyService {
     private final UserService userService;
 
     @Transactional
-    public DutyResponse.DutyDTO requestDuty(DutyRequest.AddDTO dutyRequest, String username) {
+    public DutyResponse.DutyDTO requestDuty(DutyRequest.AddDTO dutyRequest, Long userId) {
 
-        User user = userService.findUserByEmail(username);
+        User user = userService.findUserById(userId);
         Duty duty = dutyRequest.toEntityWith(user);
 
         Optional<Duty> existingDuty = dutyRepository.findByUserAndDutyDate(duty.getUser(), duty.getDutyDate());

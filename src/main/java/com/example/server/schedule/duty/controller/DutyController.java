@@ -1,6 +1,7 @@
 package com.example.server.schedule.duty.controller;
 
 
+import com.example.server._core.security.PrincipalUserDetail;
 import com.example.server._core.util.ApiResponse;
 import com.example.server.schedule.duty.dto.DutyRequest;
 import com.example.server.schedule.duty.dto.DutyResponse;
@@ -27,9 +28,10 @@ public class DutyController {
 
     @PostMapping("/duty/add")
     public ResponseEntity<ApiResponse.Result<DutyResponse.DutyDTO>> add(@RequestBody @Valid DutyRequest.AddDTO dutyRequest,
-                                                                        @AuthenticationPrincipal UserDetails userDetails) {
+                                                                        @AuthenticationPrincipal PrincipalUserDetail userDetails) {
 
-        DutyResponse.DutyDTO dutyResponse = dutyService.requestDuty(dutyRequest, userDetails.getUsername());
+        Long userId = userDetails.getUser().getId();
+        DutyResponse.DutyDTO dutyResponse = dutyService.requestDuty(dutyRequest,userId);
 
         return ResponseEntity.ok(ApiResponse.success(dutyResponse));
     }
