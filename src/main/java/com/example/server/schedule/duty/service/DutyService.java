@@ -3,6 +3,7 @@ package com.example.server.schedule.duty.service;
 
 import com.example.server._core.errors.ErrorMessage;
 import com.example.server._core.errors.exception.Exception400;
+import com.example.server._core.errors.exception.Exception404;
 import com.example.server.schedule.duty.dto.DutyRequest;
 import com.example.server.schedule.duty.dto.DutyResponse;
 import com.example.server.schedule.duty.model.Duty;
