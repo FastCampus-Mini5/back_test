@@ -1,6 +1,7 @@
 package com.example.server;
 
 import com.example.server._core.errors.exception.Exception400;
+import com.example.server._core.errors.exception.Exception403;
 import com.example.server._core.errors.exception.Exception404;
 import com.example.server.schedule.Status;
 import com.example.server.schedule.duty.dto.DutyRequest;
@@ -38,7 +39,7 @@ class DutyServiceTest {
 
     @DisplayName("유저 당직 신청 성공")
     @Test
-    void testRequestDutySuccess() {
+    void requestDuty_Success() {
         // given
         Long userId = 1L;
         DutyRequest.AddDTO dutyRequest = createDutyRequest("2023-07-01 00:00:00");
@@ -67,7 +68,7 @@ class DutyServiceTest {
 
     @DisplayName("유저 당직 신청 실패 - 유효하지 않은 사용자 ID")
     @Test
-    void testRequestDutyFailWithInvalidUserId() {
+    void requestDuty_Fail_InvalidUserId() {
         // given
         Long invalidUserId = 999L;
         DutyRequest.AddDTO dutyRequest = createDutyRequest("2023-07-01 00:00:00");
@@ -84,7 +85,7 @@ class DutyServiceTest {
 
     @DisplayName("유저 당직 신청 실패 - 이미 당직이 있는 경우")
     @Test
-    void testRequestDutyFailWithExistingDuty() {
+    void requestDuty_Fail_ExistingDuty() {
         // given
         Long userId = 1L;
         DutyRequest.AddDTO dutyRequest = createDutyRequest("2023-07-01 00:00:00");
@@ -103,6 +104,105 @@ class DutyServiceTest {
         verify(dutyRepository, never()).save(any(Duty.class));
     }
 
+    @DisplayName("유저 당직 취소 성공")
+    @Test
+    void cancelDuty_Success() {
+        // given
+        Long userId = 1L;
+        Long dutyId = 1L;
+
+        DutyRequest.CancelDTO cancelDTO = DutyRequest.CancelDTO.builder()
+                .id(dutyId)
+                .build();
+
+        User user = createUser(userId, "user1");
+        Duty duty = createDuty(dutyId, user, "2023-07-01 00:00:00");
+
+        when(dutyRepository.findById(dutyId)).thenReturn(Optional.of(duty));
+        when(dutyRepository.save(any(Duty.class))).thenReturn(duty);
+
+        // when
+        DutyResponse.DutyDTO result = dutyService.cancelDuty(cancelDTO, userId);
+
+        // then
+        assertNotNull(result);
+        assertEquals(duty.getId(), result.getId());
+        assertEquals(user.getEmail(), result.getUserEmail());
+        assertEquals(duty.getDutyDate(), result.getDutyDate());
+        assertEquals(Status.CANCELLED, result.getStatus());
+
+        verify(dutyRepository, times(1)).findById(dutyId);
+        verify(dutyRepository, times(1)).save(any(Duty.class));
+    }
+
+    @DisplayName("유저 당직 취소 실패 - 유효하지 않은 당직 ID")
+    @Test
+    void cancelDuty_Fail_InvalidDutyId() {
+        // given
+        Long userId = 1L;
+        Long invalidDutyId = 999L;
+
+        DutyRequest.CancelDTO cancelDTO = DutyRequest.CancelDTO.builder()
+                .id(invalidDutyId)
+                .build();
+
+        when(dutyRepository.findById(invalidDutyId)).thenReturn(Optional.empty());
+
+        // when, then
+        assertThrows(Exception404.class, () -> dutyService.cancelDuty(cancelDTO, userId));
+
+        verify(dutyRepository, times(1)).findById(invalidDutyId);
+        verify(dutyRepository, never()).save(any(Duty.class));
+    }
+
+    @DisplayName("유저 당직 취소 실패 - 다른 유저의 당직 취소")
+    @Test
+    void cancelDuty_Fail_UnauthorizedAccess() {
+        // given
+        Long userId = 1L;
+        Long otherUserId = 2L;
+        Long dutyId = 1L;
+
+        DutyRequest.CancelDTO cancelDTO = DutyRequest.CancelDTO.builder()
+                .id(dutyId)
+                .build();
+
+        User user = createUser(userId, "user1");
+        User otherUser = createUser(otherUserId, "user2");
+        Duty duty = createDuty(dutyId, otherUser, "2023-07-01 00:00:00");
+
+        when(dutyRepository.findById(dutyId)).thenReturn(Optional.of(duty));
+
+        // when, then
+        assertThrows(Exception403.class, () -> dutyService.cancelDuty(cancelDTO, userId));
+
+        verify(dutyRepository, times(1)).findById(dutyId);
+        verify(dutyRepository, never()).save(any(Duty.class));
+    }
+
+    @DisplayName("유저 당직 취소 실패 - 이미 승인된 당직 취소")
+    @Test
+    void cancelDuty_Fail_AlreadyApproved() {
+        // given
+        Long userId = 1L;
+        Long dutyId = 1L;
+
+        DutyRequest.CancelDTO cancelDTO = DutyRequest.CancelDTO.builder()
+                .id(dutyId)
+                .build();
+
+        User user = createUser(userId, "user1");
+        Duty approvedDuty = createDuty(dutyId, user, "2023-07-01 00:00:00");
+        approvedDuty.updateStatus(Status.APPROVE);
+
+        when(dutyRepository.findById(dutyId)).thenReturn(Optional.of(approvedDuty));
+
+        // when, then
+        assertThrows(Exception403.class, () -> dutyService.cancelDuty(cancelDTO, userId));
+
+        verify(dutyRepository, times(1)).findById(dutyId);
+        verify(dutyRepository, never()).save(any(Duty.class));
+    }
     private DutyRequest.AddDTO createDutyRequest(String dutyDate) {
         return DutyRequest.AddDTO.builder()
                 .dutyDate(Timestamp.valueOf(dutyDate))

@@ -30,6 +30,7 @@ public class DutyRequest {
     }
 
     @Getter
+    @Builder
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CancelDTO {
