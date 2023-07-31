@@ -25,12 +25,10 @@ public class VacationController {
     private final VacationService vacationService;
 
     @PostMapping("/vacation/request")
-    public ResponseEntity<ApiResponse.Result<VacationResponse.VacationDTO>> requestVacation(@RequestBody @Valid VacationRequest.AddVacationDTO vacationRequest,
+    public ResponseEntity<ApiResponse.Result<VacationResponse.VacationDTO>> requestVacation(@RequestBody @Valid VacationRequest.AddDTO vacationRequest,
                                                                                             @AuthenticationPrincipal UserDetails userDetails) {
         VacationResponse.VacationDTO vacationDTO = vacationService.requestVacation(vacationRequest, userDetails.getUsername());
 
         return ResponseEntity.ok(ApiResponse.success(vacationDTO));
     }
 }
-
-
