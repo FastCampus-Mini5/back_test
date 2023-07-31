@@ -42,13 +42,17 @@ public class DutyService {
     }
 
     @Transactional
-    public DutyResponse.DutyDTO cancelDuty(DutyRequest.CancelDTO cancelDTO) {
+    public DutyResponse.DutyDTO cancelDuty(DutyRequest.CancelDTO cancelDTO, Long userId) {
 
         if (cancelDTO == null) throw new Exception400(ErrorMessage.EMPTY_DATA_TO_CANCEL_DUTY);
 
         Long id = cancelDTO.getId();
         Duty duty = dutyRepository.findById(id)
                 .orElseThrow(() -> new Exception404(ErrorMessage.NOT_FOUND_DUTY));
+
+        if (!duty.getUser().getId().equals(userId)) {
+            throw new Exception403(ErrorMessage.UNAUTHORIZED_ACCESS_TO_DUTY);
+        }
 
         if (duty.getStatus() == Status.APPROVE) {
             throw new Exception403(ErrorMessage.DUTY_CANNOT_BE_CANCELLED);

@@ -32,9 +32,12 @@ public class DutyController {
     }
 
     @DeleteMapping("/duty/cancel")
-    public ResponseEntity<ApiResponse.Result<DutyResponse.DutyDTO>> cancel(@RequestBody @Valid DutyRequest.CancelDTO cancelDTO) {
+    public ResponseEntity<ApiResponse.Result<DutyResponse.DutyDTO>> cancel(@RequestBody @Valid DutyRequest.CancelDTO cancelDTO,
+                                                                           @AuthenticationPrincipal PrincipalUserDetail userDetails) {
 
-        DutyResponse.DutyDTO cancelledDuty = dutyService.cancelDuty(cancelDTO);
+        Long userId = userDetails.getUser().getId();
+        DutyResponse.DutyDTO cancelledDuty = dutyService.cancelDuty(cancelDTO, userId);
+
         return ResponseEntity.ok(ApiResponse.success(cancelledDuty));
     }
 }
