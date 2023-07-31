@@ -25,4 +25,11 @@ public class ErrorMessage {
     public static final String NOT_ENOUGH_REMAINING_VACATION_DAYS = "남은 연차일이 충분하지 않습니다.";
     public static final String DUTY_ALREADY_EXISTS = "해당 날짜에 이미 당직이 있습니다.";
 
+    public static final String EMPTY_DATA_TO_REQUEST_DUTY = "당직 요청 정보가 없습니다.";
+    public static final String EMPTY_DATA_TO_CANCEL_DUTY = "당직 취소 정보가 없습니다.";
+    public static final String NOT_FOUND_DUTY = "요청한 당직이 존재하지 않습니다.";
+    public static final String DUTY_CANNOT_BE_CANCELLED = "이미 승인된 당직은 취소할 수 없습니다.";
+
+
+
 }

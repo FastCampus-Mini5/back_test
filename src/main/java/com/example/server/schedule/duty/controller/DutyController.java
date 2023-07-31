@@ -1,6 +1,5 @@
 package com.example.server.schedule.duty.controller;
 
-
 import com.example.server._core.security.PrincipalUserDetail;
 import com.example.server._core.util.ApiResponse;
 import com.example.server.schedule.duty.dto.DutyRequest;
@@ -10,11 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -34,5 +29,12 @@ public class DutyController {
         DutyResponse.DutyDTO dutyResponse = dutyService.requestDuty(dutyRequest,userId);
 
         return ResponseEntity.ok(ApiResponse.success(dutyResponse));
+    }
+
+    @DeleteMapping("/duty/cancel")
+    public ResponseEntity<ApiResponse.Result<DutyResponse.DutyDTO>> cancel(@RequestBody @Valid DutyRequest.CancelDTO cancelDTO) {
+
+        DutyResponse.DutyDTO cancelledDuty = dutyService.cancelDuty(cancelDTO);
+        return ResponseEntity.ok(ApiResponse.success(cancelledDuty));
     }
 }

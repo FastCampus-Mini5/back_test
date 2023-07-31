@@ -4,6 +4,7 @@ import com.example.server.schedule.duty.model.Duty;
 import com.example.server.user.model.User;
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 
@@ -26,5 +27,26 @@ public class DutyRequest {
                     .dutyDate(dutyDate)
                     .build();
         }
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CancelDTO {
+
+        @NotNull
+        private Long id;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class StatusDTO {
+
+        @NotNull
+        private Long id;
+
+        @NotBlank
+        private String status;
     }
 }

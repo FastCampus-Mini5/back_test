@@ -1,6 +1,5 @@
 package com.example.server.schedule.duty.repository;
 
-
 import com.example.server.schedule.duty.model.Duty;
 import com.example.server.user.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
