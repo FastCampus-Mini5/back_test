@@ -19,9 +19,13 @@ public class ErrorMessage {
     public static final String EMPTY_DATA_TO_CHECK_EMAIL = "중복 확인을 위한 이메일 정보가 존재하지 않습니다.";
     public static final String LOGIN_FAILED = "회원 정보가 존재하지 않습니다.";
 
-    public static final String EMPTY_DATA_TO_REQUEST_VACATION = "연차 요청을 위한 데이터가 존재하지 않습니다.";
+    public static final String EMPTY_DATA_TO_REQUEST_VACATION = "연차 신청 정보가 없습니다.";
     public static final String VACATION_INFO_NOT_FOUND = "연차 정보를 찾을 수 없습니다.";
     public static final String NOT_ENOUGH_REMAINING_VACATION_DAYS = "남은 연차일이 충분하지 않습니다.";
+    public static final String VACATION_NOT_FOUND = "요청한 연차가 존재하지 않습니다.";
+    public static final String EMPTY_DATA_TO_CANCEL_VACATION = "연차 취소 정보가 없습니다.";
+    public static final String UNAUTHORIZED_ACCESS_TO_VACATION = "연차에 대한 접근 권한이 없습니다.";
+    public static final String VACATION_CANNOT_BE_CANCELLED = "이미 승인된 연차는 취소할 수 없습니다.";
 
     public static final String DUTY_ALREADY_EXISTS = "해당 날짜에 이미 당직이 있습니다.";
     public static final String EMPTY_DATA_TO_REQUEST_DUTY = "당직 신청 정보가 없습니다.";

@@ -3,7 +3,9 @@ package com.example.server.schedule.vacation.service;
 
 import com.example.server._core.errors.ErrorMessage;
 import com.example.server._core.errors.exception.Exception400;
+import com.example.server._core.errors.exception.Exception403;
 import com.example.server._core.errors.exception.Exception404;
+import com.example.server.schedule.Status;
 import com.example.server.schedule.vacation.dto.VacationRequest;
 import com.example.server.schedule.vacation.dto.VacationResponse;
 import com.example.server.schedule.vacation.model.Vacation;
@@ -50,6 +52,28 @@ public class VacationService {
 
         vacationInfo.updateInfo((int) vacationDays);
 
+        Vacation savedVacation = vacationRepository.save(vacation);
+        return VacationResponse.VacationDTO.from(savedVacation);
+    }
+
+    @Transactional
+    public VacationResponse.VacationDTO cancelVacation(VacationRequest.CancelDTO cancelDTO, Long userId) {
+
+        if (cancelDTO == null) throw new Exception400(ErrorMessage.EMPTY_DATA_TO_CANCEL_VACATION);
+
+        Long id = cancelDTO.getId();
+        Vacation vacation = vacationRepository.findById(id)
+                .orElseThrow(() -> new Exception404(ErrorMessage.VACATION_NOT_FOUND));
+
+        if (!vacation.getUser().getId().equals(userId)) {
+            throw new Exception403(ErrorMessage.UNAUTHORIZED_ACCESS_TO_VACATION);
+        }
+
+        if (vacation.getStatus() == Status.APPROVE) {
+            throw new Exception403(ErrorMessage.VACATION_CANNOT_BE_CANCELLED);
+        }
+
+        vacation.updateStatus(Status.CANCELLED);
         Vacation savedVacation = vacationRepository.save(vacation);
         return VacationResponse.VacationDTO.from(savedVacation);
     }
