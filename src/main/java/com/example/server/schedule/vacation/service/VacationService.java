@@ -27,9 +27,12 @@ public class VacationService {
     private final VacationInfoRepository vacationInfoRepository;
 
     @Transactional
-    public VacationResponse.VacationDTO requestVacation(VacationRequest.AddVacationDTO vacationRequest, String username) {
+    public VacationResponse.VacationDTO requestVacation(VacationRequest.AddDTO vacationRequest, String username) {
+
+        if (vacationRequest == null) throw new Exception400(ErrorMessage.EMPTY_DATA_TO_REQUEST_VACATION);
+
         User user = userService.findUserByEmail(username);
-        Vacation vacation = vacationRequest.toVacationEntity(user);
+        Vacation vacation = vacationRequest.toEntityWith(user);
 
         VacationInfo vacationInfo = vacationInfoRepository.findByUser(vacation.getUser())
                 .orElseThrow(() -> new Exception404(ErrorMessage.VACATION_INFO_NOT_FOUND));
@@ -48,4 +51,3 @@ public class VacationService {
         return VacationResponse.VacationDTO.from(savedVacation);
     }
 }
-

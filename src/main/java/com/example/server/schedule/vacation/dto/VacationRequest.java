@@ -16,7 +16,7 @@ public class VacationRequest {
         @AllArgsConstructor
         @Builder
         @ToString
-        public static class AddVacationDTO {
+        public static class AddDTO {
 
                 @NotNull
                 private Reason reason;
@@ -27,7 +27,7 @@ public class VacationRequest {
                 @NotNull
                 private Timestamp endDate;
 
-                public Vacation toVacationEntity(User user) {
+                public Vacation toEntityWith(User user) {
                         return Vacation.builder()
                                 .user(user)
                                 .reason(reason)
