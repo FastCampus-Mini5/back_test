@@ -12,6 +12,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "on_duty_tb")
@@ -47,5 +48,10 @@ public class Duty {
     @PrePersist
     protected void onCreate() {
         status = Status.PENDING;
+    }
+
+    public void updateStatus(Status status) {
+        this.status = status;
+        this.approvalDate = Timestamp.valueOf(LocalDateTime.now());
     }
 }
