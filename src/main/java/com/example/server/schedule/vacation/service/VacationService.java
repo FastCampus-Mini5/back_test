@@ -44,8 +44,7 @@ public class VacationService {
             throw new Exception400(ErrorMessage.NOT_ENOUGH_REMAINING_VACATION_DAYS);
         }
 
-        vacationInfo.setRemainVacation(vacationInfo.getRemainVacation() - (int) vacationDays);
-        vacationInfo.setUsedVacation(vacationInfo.getUsedVacation() + (int) vacationDays);
+        vacationInfo.updateInfo((int) vacationDays);
 
         Vacation savedVacation = vacationRepository.save(vacation);
         return VacationResponse.VacationDTO.from(savedVacation);
