@@ -36,4 +36,14 @@ public class VacationRequest {
                                 .build();
                 }
         }
+
+        @Getter
+        @NoArgsConstructor
+        @AllArgsConstructor
+        @Builder
+        @ToString
+        public static class CancelDTO {
+                @NotNull
+                private Long id;
+        }
 }
