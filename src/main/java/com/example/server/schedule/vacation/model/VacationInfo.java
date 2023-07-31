@@ -31,4 +31,9 @@ public class VacationInfo {
         remainVacation = 0;
         usedVacation = 0;
     }
+
+    public void updateInfo(int vacationDays) {
+        this.remainVacation -= vacationDays;
+        this.usedVacation += vacationDays;
+    }
 }
