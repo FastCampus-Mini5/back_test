@@ -12,4 +12,3 @@ public interface DutyRepository extends JpaRepository<Duty, Long> {
 
     Optional<Duty> findByUserAndDutyDate(User user, Timestamp dutyDate);
 }
-
