@@ -17,7 +17,8 @@ public class ErrorMessage {
     public static final String EMPTY_DATA_TO_SIGNIN = "로그인을 위한 데이터가 존재하지 않습니다.";
     public static final String EMPTY_DATA_TO_CHECK_EMAIL = "중복 확인을 위한 이메일 정보가 존재하지 않습니다.";
     public static final String LOGIN_FAILED = "회원 정보가 존재하지 않습니다.";
-    public static final String USER_NOT_FOUND_WITH_EMAIL = "이메일을 가진 사용자를 찾을 수 없습니다. ";
+    public static final String USER_NOT_FOUND_WITH_ID = "ID를 가진 사용자를 찾을 수 없습니다. ";
+    public static final String EMPTY_USER_ID = "유저 ID 정보가 없습니다.";
 
     public static final String EMPTY_DATA_TO_REQUEST_VACATION = "연차 요청을 위한 데이터가 존재하지 않습니다.";
     public static final String VACATION_INFO_NOT_FOUND = "연차 정보를 찾을 수 없습니다.";
