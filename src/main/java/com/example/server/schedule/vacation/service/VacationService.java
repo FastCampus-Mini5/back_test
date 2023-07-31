@@ -27,11 +27,11 @@ public class VacationService {
     private final VacationInfoRepository vacationInfoRepository;
 
     @Transactional
-    public VacationResponse.VacationDTO requestVacation(VacationRequest.AddDTO vacationRequest, String username) {
+    public VacationResponse.VacationDTO requestVacation(VacationRequest.AddDTO vacationRequest, Long userId) {
 
         if (vacationRequest == null) throw new Exception400(ErrorMessage.EMPTY_DATA_TO_REQUEST_VACATION);
 
-        User user = userService.findUserByEmail(username);
+        User user = userService.findUserById(userId);
         Vacation vacation = vacationRequest.toEntityWith(user);
 
         VacationInfo vacationInfo = vacationInfoRepository.findByUser(vacation.getUser())

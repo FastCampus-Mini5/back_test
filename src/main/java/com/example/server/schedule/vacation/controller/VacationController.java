@@ -1,5 +1,6 @@
 package com.example.server.schedule.vacation.controller;
 
+import com.example.server._core.security.PrincipalUserDetail;
 import com.example.server._core.util.ApiResponse;
 import com.example.server.schedule.vacation.dto.VacationRequest;
 import com.example.server.schedule.vacation.dto.VacationResponse;
@@ -26,8 +27,9 @@ public class VacationController {
 
     @PostMapping("/vacation/request")
     public ResponseEntity<ApiResponse.Result<VacationResponse.VacationDTO>> requestVacation(@RequestBody @Valid VacationRequest.AddDTO vacationRequest,
-                                                                                            @AuthenticationPrincipal UserDetails userDetails) {
-        VacationResponse.VacationDTO vacationDTO = vacationService.requestVacation(vacationRequest, userDetails.getUsername());
+                                                                                            @AuthenticationPrincipal PrincipalUserDetail userDetails) {
+        Long userId = userDetails.getUser().getId();
+        VacationResponse.VacationDTO vacationDTO = vacationService.requestVacation(vacationRequest, userId);
 
         return ResponseEntity.ok(ApiResponse.success(vacationDTO));
     }
