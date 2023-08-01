@@ -15,6 +15,7 @@ public class VacationResponse {
     public static class VacationDTO {
 
         private Long id;
+        private String userEmail;
         private String username;
         private Reason reason;
         private Status status;
@@ -25,7 +26,7 @@ public class VacationResponse {
         public static VacationDTO from(Vacation vacation) {
             return VacationDTO.builder()
                     .id(vacation.getId())
-                    .username(vacation.getUser().getUsername())
+                    .userEmail(vacation.getUser().getEmail())
                     .reason(vacation.getReason())
                     .status(vacation.getStatus())
                     .startDate(vacation.getStartDate())

@@ -1,15 +1,19 @@
 package com.example.server.schedule.vacation.model;
 
 import com.example.server.user.model.User;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Getter
-@Setter
-@Table(name = "vacation_info_tb")
 @Entity
+@Table(name = "vacation_info_tb")
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Getter
 public class VacationInfo {
 
     @Id
