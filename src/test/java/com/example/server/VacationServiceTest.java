@@ -2,6 +2,7 @@ package com.example.server;
 
 
 import com.example.server._core.errors.exception.Exception400;
+import com.example.server._core.errors.exception.Exception403;
 import com.example.server._core.errors.exception.Exception404;
 import com.example.server.schedule.Status;
 import com.example.server.schedule.vacation.dto.VacationRequest;
@@ -44,7 +45,7 @@ class VacationServiceTest {
     @InjectMocks
     private VacationService vacationService;
 
-    @DisplayName("연차 신청 성공")
+    @DisplayName("유저 연차 신청 성공")
     @Test
     void requestVacation_Success() {
         // given
@@ -78,7 +79,7 @@ class VacationServiceTest {
         verify(vacationInfoRepository, times(1)).findByUser(user);
     }
 
-    @DisplayName("연차 신청 실패 - 유효하지 않은 사용자 ID")
+    @DisplayName("유저 연차 신청 실패 - 유효하지 않은 사용자 ID")
     @Test
     void requestVacation_Fail_InvalidUserId() {
         // given
@@ -96,7 +97,7 @@ class VacationServiceTest {
         verify(vacationInfoRepository, never()).save(any(VacationInfo.class));
     }
 
-    @DisplayName("연차 신청 실패 - 부족한 남은 연차 일수")
+    @DisplayName("유저 연차 신청 실패 - 부족한 남은 연차 일수")
     @Test
     void requestVacation_Fail_NotEnoughRemainingDays() {
         // given
@@ -118,9 +119,87 @@ class VacationServiceTest {
         verify(vacationInfoRepository, never()).save(any(VacationInfo.class));
     }
 
+    @DisplayName("유저 연차 취소 성공")
+    @Test
+    void cancelVacation_Success() {
+        // given
+        Long userId = 1L;
+        Long vacationId = 1L;
+
+        VacationRequest.CancelDTO cancelDTO = VacationRequest.CancelDTO.builder()
+                .id(vacationId)
+                .build();
+
+        User user = createUser(userId, "user1");
+        Vacation vacation = createVacation(vacationId, user, "2023-07-01 00:00:00", "2023-07-03 00:00:00", Status.PENDING);
+
+        when(vacationRepository.findById(vacationId)).thenReturn(Optional.of(vacation));
+        when(vacationRepository.save(any(Vacation.class))).thenReturn(vacation);
+
+        // when
+        VacationResponse.VacationDTO result = vacationService.cancelVacation(cancelDTO, userId);
+
+        // then
+        assertNotNull(result);
+        assertEquals(vacation.getId(), result.getId());
+        assertEquals(user.getEmail(), result.getUserEmail());
+        assertEquals(vacation.getReason(), result.getReason());
+        assertEquals(Status.CANCELLED, result.getStatus());
+        assertEquals(vacation.getStartDate(), result.getStartDate());
+        assertEquals(vacation.getEndDate(), result.getEndDate());
+        assertEquals(vacation.getApprovalDate(), result.getApprovalDate());
+
+        verify(vacationRepository, times(1)).findById(vacationId);
+        verify(vacationRepository, times(1)).save(any(Vacation.class));
+    }
+
+    @DisplayName("유저 연차 취소 실패 - 존재하지 않는 연차 ID")
+    @Test
+    void cancelVacation_Fail_InvalidVacationId() {
+        // given
+        Long invalidVacationId = 999L;
+        VacationRequest.CancelDTO cancelDTO = new VacationRequest.CancelDTO(invalidVacationId);
+
+        when(vacationRepository.findById(invalidVacationId)).thenReturn(Optional.empty());
+
+        // when, then
+        assertThrows(Exception404.class, () -> vacationService.cancelVacation(cancelDTO, 1L));
+
+        verify(vacationRepository, times(1)).findById(invalidVacationId);
+    }
+
+    @DisplayName("유저 연차 취소 실패 - 이미 승인된 연차 취소")
+    @Test
+    void cancelVacation_Fail_ApprovedVacation() {
+        // given
+        Long userId = 1L;
+        Long vacationId = 1L;
+        VacationRequest.CancelDTO cancelDTO = new VacationRequest.CancelDTO(vacationId);
+
+        User user = createUser(userId, "user1");
+        Vacation vacation = createVacation(vacationId, user, "2023-07-01 00:00:00", "2023-07-03 00:00:00", Status.APPROVE);
+        when(vacationRepository.findById(vacationId)).thenReturn(Optional.of(vacation));
+
+        // when, then
+        assertThrows(Exception403.class, () -> vacationService.cancelVacation(cancelDTO, userId));
+
+        verify(vacationRepository, times(1)).findById(vacationId);
+    }
+
+    private Vacation createVacation(Long id, User user, String startDate, String endDate, Status status) {
+        return Vacation.builder()
+                .id(id)
+                .user(user)
+                .reason(Reason.병가)
+                .status(status)
+                .startDate(Timestamp.valueOf(startDate))
+                .endDate(Timestamp.valueOf(endDate))
+                .build();
+    }
+
     private VacationRequest.AddDTO createVacationRequest(String startDate, String endDate) {
         return VacationRequest.AddDTO.builder()
-                .reason(Reason.반차)
+                .reason(Reason.휴가)
                 .startDate(Timestamp.valueOf(startDate))
                 .endDate(Timestamp.valueOf(endDate))
                 .build();
@@ -142,7 +221,7 @@ class VacationServiceTest {
         return Vacation.builder()
                 .id(id)
                 .user(user)
-                .reason(Reason.반차)
+                .reason(Reason.병가)
                 .status(Status.PENDING)
                 .startDate(Timestamp.valueOf(startDate))
                 .endDate(Timestamp.valueOf(endDate))

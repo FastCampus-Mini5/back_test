@@ -27,6 +27,7 @@ public class VacationResponse {
             return VacationDTO.builder()
                     .id(vacation.getId())
                     .userEmail(vacation.getUser().getEmail())
+                    .username(vacation.getUser().getUsername())
                     .reason(vacation.getReason())
                     .status(vacation.getStatus())
                     .startDate(vacation.getStartDate())
