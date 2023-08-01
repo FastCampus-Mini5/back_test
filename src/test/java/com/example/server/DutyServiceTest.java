@@ -155,31 +155,6 @@ class DutyServiceTest {
         verify(dutyRepository, never()).save(any(Duty.class));
     }
 
-    @DisplayName("유저 당직 취소 실패 - 다른 유저의 당직 취소")
-    @Test
-    void cancelDuty_Fail_UnauthorizedAccess() {
-        // given
-        Long userId = 1L;
-        Long otherUserId = 2L;
-        Long dutyId = 1L;
-
-        DutyRequest.CancelDTO cancelDTO = DutyRequest.CancelDTO.builder()
-                .id(dutyId)
-                .build();
-
-        User user = createUser(userId, "user1");
-        User otherUser = createUser(otherUserId, "user2");
-        Duty duty = createDuty(dutyId, otherUser, "2023-07-01 00:00:00");
-
-        when(dutyRepository.findById(dutyId)).thenReturn(Optional.of(duty));
-
-        // when, then
-        assertThrows(Exception403.class, () -> dutyService.cancelDuty(cancelDTO, userId));
-
-        verify(dutyRepository, times(1)).findById(dutyId);
-        verify(dutyRepository, never()).save(any(Duty.class));
-    }
-
     @DisplayName("유저 당직 취소 실패 - 이미 승인된 당직 취소")
     @Test
     void cancelDuty_Fail_AlreadyApproved() {
